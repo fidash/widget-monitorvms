@@ -1,38 +1,35 @@
-/* global ProgressBar,$ */
+/* global MashupPlatform,ProgressBar,$ */
 
 var VmView = (function () {
     "use strict";
-
 
     /******************************************************************/
     /*                        V A R I A B L E S                       */
     /******************************************************************/
 
     var types = {
-        "cpu": {
+        cpu: {
             color: "#009EFF"
         },
-        "ram": {
+        ram: {
             color: "#C971CC"
         },
-        "disk": {
+        disk: {
             color: "#60D868"
         }
     };
-
 
     /*****************************************************************
     *                     C O N S T R U C T O R                      *
     *****************************************************************/
 
-    function VmView () {}
-
+    function VmView() {}
 
     /******************************************************************/
     /*                P R I V A T E   F U N C T I O N S               */
     /******************************************************************/
 
-    function drawChart (name, type, data, tooltip, show) {
+    function drawChart(name, type, data, tooltip, show) {
         var id = name + "-" + type;
         var showC = (show) ? "" : "myhide";
 
@@ -47,7 +44,7 @@ var VmView = (function () {
         var progress = new ProgressBar.Line("#" + id, {
             color: types[type].color,
             trailColor: "#ddd",
-            strokeWidth: 4,
+            strokeWidth: 5,
             svgStyle: {
                 width: "100%"
             }
@@ -55,7 +52,6 @@ var VmView = (function () {
 
         progress.animate(data);
     }
-
 
     /******************************************************************/
     /*                 P U B L I C   F U N C T I O N S                */
@@ -70,7 +66,7 @@ var VmView = (function () {
         var ramData = parseFloat(measures.percRAMUsed.value);
         var diskData = parseFloat(measures.percDiskUsed.value);
 
-        var uptime = measures.sysUptime.value;
+        // var uptime = measures.sysUptime.value;
 
         var cpuText = cpuData.toFixed(2) + "% CPU load";
         var ramText = ramData.toFixed(2) + "% RAM used";
@@ -85,7 +81,7 @@ var VmView = (function () {
             .addClass("flexitem vmChart noselect " + region + " " + hideVm + " " + hideFilter)
             .appendTo("#regionContainer")
             .prop("title", "Vm " + vm + " of the region " + region)
-            .click(function() {
+            .click(function () {
                 var dataToSend = {
                     id: vm,
                     region: region
@@ -104,10 +100,9 @@ var VmView = (function () {
             .addClass("measures-container")
             .appendTo("#" + id);
 
-
-        drawChart(id, 'cpu', cpuData/100, cpuText, status.cpu);
-        drawChart(id, 'ram', ramData/100, ramText, status.ram);
-        drawChart(id, 'disk', diskData/100, diskText, status.disk);
+        drawChart(id, "cpu", cpuData / 100, cpuText, status.cpu);
+        drawChart(id, "ram", ramData / 100, ramText, status.ram);
+        drawChart(id, "disk", diskData / 100, diskText, status.disk);
 
         return {
             id: id,

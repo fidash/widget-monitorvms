@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="UPM-ETSIINF" name="monitoring-virtualmachines" version="0.9.3">
+<widget xmlns="http://wirecloud.conwet.fi.upm.es/ns/macdescription/1" vendor="UPM-ETSIINF" name="monitoring-vms" version="0.10.1">
 
   <details>
-    <title>Monitoring Virtualmachines</title>
+    <title>Monitoring VM's</title>
     <email>mgarcia@conwet.com</email>
     <image>images/catalogue.png</image>
     <smartphoneimage>images/catalogueSmartphone.png</smartphoneimage>

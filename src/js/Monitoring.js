@@ -5,60 +5,6 @@ var Monitoring = (function () {
     /***  AUTHENTICATION VARIABLES  ***/
     var url = "http://130.206.84.4:11027/monitoring/regions/";
 
-    // var createDefaultVm = function createDefaultVm(region, vm) {
-    //     var randomN = function randomN() {
-    //         return (Math.random() * 100).toString();
-    //     };
-
-    //     return {
-    //         _links: {
-    //             self: {
-    //                 href: "/monitoring/regions/" + region + "/vms/" + vm
-    //             },
-    //             services: {
-    //                 href: "/monitoring/regions/" + region + "/vms/" + vm + "/services"
-    //             }
-    //         },
-    //         regionid: region,
-    //         vmid: vm,
-    //         ipAddresses: [
-    //             {
-    //                 ipAddress: "1.2.3.4"
-    //             }
-    //         ],
-    //         measures: [
-    //             {
-    //                 timestamp: "2013-12-20 12.00",
-    //                 percCPULoad: {
-    //                     value: randomN(),
-    //                     description: "desc"
-    //                 },
-    //                 percRAMUsed: {
-    //                     value: randomN(),
-    //                     description: "desc"
-    //                 },
-    //                 percDiskUsed: {
-    //                     value: randomN(),
-    //                     description: "desc"
-    //                 },
-    //                 sysUptime: {
-    //                     value: randomN(),
-    //                     description: "desc"
-    //                 },
-    //                 hostName: {
-    //                     value: "Host" + vm,
-    //                     description: "desc"
-    //                 }
-    //             }
-    //         ],
-    //         traps: [
-    //             {
-    //                 description: "desc"
-    //             }
-    //         ]
-    //     };
-    // };
-
     /*****************************************************************
     *                     C O N S T R U C T O R                      *
     *****************************************************************/
@@ -234,7 +180,9 @@ var Monitoring = (function () {
             // Data is a list of vms, let"s do one request by vm
             var vms = [];
             data.vms.forEach(function (x) {
-                vms.push(x.id);
+                if (!!x.id && x.id !== "None") {
+                    vms.push(x.id);
+                }
             });
 
             this.vmsByRegion[region] = vms;
@@ -245,7 +193,7 @@ var Monitoring = (function () {
             /* var view = new views[this.view]();
                var rdata = view.build(region, data, this.measures_status);
                this.options.data[rdata.region] = rdata.data;
-               sortRegions.call(this); */
+             sortRegions.call(this); */
         }.bind(this));
     }
 
@@ -342,11 +290,13 @@ var Monitoring = (function () {
             if (closing) {
                 $(".navbar").collapse("hide");
                 $(".slidecontainer").removeClass("open").addClass("closed");
+                $("#regionContainer").css("margin-top", "6px");
 
                 // elem.text("v");
             } else {
                 $(".navbar").collapse("show");
                 $(".slidecontainer").removeClass("closed").addClass("open");
+                $("#regionContainer").css("margin-top", "93px");
 
                 // elem.text("^");
             }
@@ -507,8 +457,10 @@ var Monitoring = (function () {
         if (this.variables.closed.get() === "true") {
             $(".navbar").collapse("hide");
             $(".slidecontainer").removeClass("open").addClass("closed");
+            $("#regionContainer").css("margin-top", "6px");
         } else {
             $(".slidecontainer").removeClass("closed").addClass("open");
+            $("#regionContainer").css("margin-top", "93px");
         }
 
         var sort = this.variables.sort.get();
