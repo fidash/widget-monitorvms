@@ -58,6 +58,8 @@ var VmView = (function () {
     /******************************************************************/
 
     VmView.prototype.build = function (region, vm, data, status, minvalues, comparef, filtertext) {
+        vm = vm.replace(/\./g, "_");
+
         var id = region + "-" + vm;
         var measures = data.measures[0];
 
@@ -65,6 +67,21 @@ var VmView = (function () {
         var cpuData = parseFloat(measures.percCPULoad.value);
         var ramData = parseFloat(measures.percRAMUsed.value);
         var diskData = parseFloat(measures.percDiskUsed.value);
+
+        if (isNaN(cpuData) && isNaN(ramData) && isNaN(diskData)) {
+            return {
+                id: id,
+                data: {
+                    cpu: NaN,
+                    ram: NaN,
+                    disk: NaN
+                }
+            };
+        }
+
+        cpuData = cpuData || 0.0;
+        ramData = ramData || 0.0;
+        diskData = diskData || 0.0;
 
         // var uptime = measures.sysUptime.value;
 
