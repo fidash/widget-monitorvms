@@ -60,5 +60,5 @@
         "karma-firefox-launcher": "^0.1.4"
     },
     "homepage": "https://github.com/fidash/widget-monitorvirtualmachines",
-    "name": "Monitoring VM's"
+    "name": "widget-monitorvms"
 }
