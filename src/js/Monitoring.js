@@ -12,6 +12,8 @@ var Monitoring = (function () {
     function Monitoring() {
         this.regions = [];
 
+        this.torequest = [];
+
         this.view   = "region";
         this.vmId = $("#vm").val();
         this.vmsByRegion = {};
@@ -148,6 +150,9 @@ var Monitoring = (function () {
     function removeRegion(region) {
         // Remove all vms from the region
         $("." + region).remove();
+        this.torequest = this.torequest.filter(function(x) {
+            return x.region !== region;
+        });
     }
 
     function drawVmsRegion(region) {
@@ -176,19 +181,24 @@ var Monitoring = (function () {
                 return;
             }
 
-            // setPlaceholder(false);
+            var startR = this.torequest.length === 0;
+
             // Data is a list of vms, let"s do one request by vm
             var vms = [];
             data.vms.forEach(function (x) {
                 if (!!x.id && x.id !== "None") {
                     vms.push(x.id);
+                    this.torequest.push({region: region, vm: x.id});
                 }
-            });
+            }.bind(this));
 
             this.vmsByRegion[region] = vms;
 
-            vms.forEach(drawVm.bind(this, region));
-            sortRegions.call(this);
+            if (startR) {
+                startRequests.call(this);
+            }
+            // vms.forEach(drawVm.bind(this, region));
+            // sortRegions.call(this);
 
             /* var view = new views[this.view]();
                var rdata = view.build(region, data, this.measures_status);
@@ -212,10 +222,23 @@ var Monitoring = (function () {
                 return;
             }
 
-            var hdata = new VmView().build(region, vm, data, this.measures_status, this.minvalues, this.comparef, this.filtertext);
-            this.options.data[hdata.id] = hdata.data;
-            sortRegions.call(this);
+            if (isRegionSelected(region)) {
+                var hdata = new VmView().build(region, vm, data, this.measures_status, this.minvalues, this.comparef, this.filtertext);
+                this.options.data[hdata.id] = hdata.data;
+                sortRegions.call(this);
+            }
+
+            startRequests.call(this); // "recursive" call
         }.bind(this));
+    }
+
+    function startRequests() {
+        if (this.torequest.length === 0) {
+            return;
+        }
+
+        var elem = this.torequest.shift();
+        drawVm.call(this, elem.region, elem.vm);
     }
 
     function fillRegionSelector(regions) {
@@ -246,6 +269,10 @@ var Monitoring = (function () {
         return $("#region_selector option").map(function (x, y) {
             return $(y).text();
         }).toArray();
+    }
+
+    function isRegionSelected(region) {
+        return $("#region_selector").val().indexOf(region) > -1;
     }
 
     function filterNotRegion(regions) {

@@ -10,7 +10,7 @@
     "bugs": {
         "url": "https://github.com/fidash/widget-monitorvirtualmachines/issues"
     },
-    "version": "0.10.2",
+    "version": "0.10.3",
     "dependencies": {
         "jquery": "^2.1.4",
         "bootstrap-select": "^1.7.5",
