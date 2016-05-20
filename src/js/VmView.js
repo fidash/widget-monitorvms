@@ -79,9 +79,9 @@ var VmView = (function () {
             };
         }
 
-        cpuData = cpuData || 0.0;
-        ramData = ramData || 0.0;
-        diskData = diskData || 0.0;
+        cpuData = (cpuData < 0 ? 0 : cpuData) || 0.0;
+        ramData = (ramData < 0 ? 0 : ramData) || 0.0;
+        diskData = (diskData < 0 ? 0 : diskData) || 0.0;
 
         // var uptime = measures.sysUptime.value;
 
