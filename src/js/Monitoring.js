@@ -5,6 +5,8 @@ var Monitoring = (function () {
     /***  AUTHENTICATION VARIABLES  ***/
     var url = "http://130.206.84.4:11027/monitoring/regions/";
 
+    var vmurl = "http://130.206.84.4:11030/monitoring/regions/";
+
     /*****************************************************************
     *                     C O N S T R U C T O R                      *
     *****************************************************************/
@@ -155,7 +157,30 @@ var Monitoring = (function () {
         });
     }
 
+
     function drawVmsRegion(region) {
+        var newurl = vmurl + region + "/vmsdetails";
+
+        FIDASHRequests.get(newurl, function (err, data) {
+            if (err) {
+                window.console.log(err);
+                MashupPlatform.widget.log("The API seems down (Asking for region " + region + "): " + err.statusText);
+                return;
+            }
+
+            data.vms.forEach(function (x) {
+                if (isRegionSelected(region)) {
+                    var vm = x.vmid;
+                    var hdata = new VmView().build(region, vm, x.measures, this.measures_status, this.minvalues, this.comparef, this.filtertext);
+                    this.options.data[hdata.id] = hdata.data;
+                }
+            }.bind(this));
+
+            sortRegions.call(this);
+        }.bind(this));
+    }
+
+    function drawVmsRegion2(region) {
         var newurl = url + region + "/vms";
 
         FIDASHRequests.get(newurl, function (err, data) {
